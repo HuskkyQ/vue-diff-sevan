@@ -1,6 +1,7 @@
 import Vnode from "./vnode"
 import { getTag, sameVnode } from './utils'
 import createElement from "./createElement";
+import patchVnode from "./patchVnode";
 
 export default function(oldVnode, newVnode) {
     if(!oldVnode.tag) {
@@ -8,7 +9,7 @@ export default function(oldVnode, newVnode) {
     }
 
     if(sameVnode(oldVnode, newVnode)) {
-        console.log('是同一个节点')
+        patchVnode(oldVnode, newVnode)
     } else {
         // 不是同一个节点，暴力插入新节点，删除旧节点
         let newVnodeElm = createElement(newVnode);
