@@ -38,15 +38,10 @@ function createKeyToOldIdx (children, beginIdx, endIdx) {
 function findIdxInOld (node, oldCh, start, end) {
     for (let i = start; i < end; i++) {
         const c = oldCh[i]
+        // 返回第一个可以复用的旧节点（旧节点的key也一定会是null）
         if (isDef(c) && sameVnode(node, c)) return i
     }
 }
-
-// function addVnodes (parentElm, refElm, vnodes, startIdx, endIdx, insertedVnodeQueue) {
-//     for (; startIdx <= endIdx; ++startIdx) {
-//         createElm(vnodes[startIdx], insertedVnodeQueue, parentElm, refElm, false, vnodes, startIdx)
-//     }
-// }
 
 function addVnodes(parentElm, refElm, vnodes, startIdx, endIdx) {
     for (let i = startIdx; i <= endIdx; i++) {

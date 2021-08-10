@@ -38,11 +38,6 @@ export default function updateChildren(parentElm, oldCh, newCh) {
     } else if (sameVnode(oldStartVnode, newEndVnode)) { // ③ 旧首 新尾 比较
       // Vnode moved right
       patchVnode(oldStartVnode, newEndVnode);
-      // nodeOps.insertBefore(
-      //   parentElm,
-      //   oldStartVnode.elm,
-      //   nodeOps.nextSibling(oldEndVnode.elm)
-      // );
       // 将当前旧的子节点列表的开始节点 移动到结束节点之后
       parentElm.insertBefore(oldStartVnode.elm, oldEndVnode.elm.nextSibling);
       oldStartVnode = oldCh[++oldStartIdx];
@@ -50,42 +45,39 @@ export default function updateChildren(parentElm, oldCh, newCh) {
     } else if (sameVnode(oldEndVnode, newStartVnode)) { // ④ 旧尾 新首 比较
       // Vnode moved left
       patchVnode(oldEndVnode, newStartVnode);
-      // nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm);
       // 将当前旧的子节点列表的结束节点 移动到开始节点之前
       parentElm.insertBefore(oldEndVnode.elm, oldStartVnode.elm);
       oldEndVnode = oldCh[--oldEndIdx];
       newStartVnode = newCh[++newStartIdx];
-    } else { // 前四种比较都没得到相同节点 则遍历循环
+    } else { 
+      // 前四种比较都没得到相同节点 则遍历循环
       if (isUndef(oldKeyToIdx)) { // 旧的节点key和索引表是否为空 为空 进入；不为空 则直接使用
         // 意思是 第一次创建 后续可以使用 直到结束
         oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);
       }
 
+      // 查询是否存在 与新节点的key相同的旧节点的索引
       idxInOld = isDef(newStartVnode.key)
         ? oldKeyToIdx[newStartVnode.key]
         : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx);
+      // 因为如果新节点不存在key 那可能旧节点上也有不存在key的节点
 
       if (isUndef(idxInOld)) {
         // New element
-        // createElm(
-        //   newStartVnode,
-        //   null,
-        //   parentElm,
-        //   oldStartVnode.elm
-        // );
+        let newElm = createElement(newStartVnode); // 在旧节点列表中没有查找到 使用当前新节点创建一个新的真实dom
+        parentElm.insertBefore(newElm, oldStartVnode.elm); // 插入到当前旧节点列表开始节点的前面
       } else {
+        // 如果找到对应key的这一项 就是需要移动的项
         vnodeToMove = oldCh[idxInOld];
         if (sameVnode(vnodeToMove, newStartVnode)) {
           patchVnode(vnodeToMove, newStartVnode);
           oldCh[idxInOld] = undefined;
-          // nodeOps.insertBefore(
-          //   parentElm,
-          //   vnodeToMove.elm,
-          //   oldStartVnode.elm
-          // );
+          parentElm.insertBefore(vnodeToMove.elm, oldStartVnode.elm);
         } else {
+          // 相同的key的节点但是是不一样的元素 就用创建新节点来处理
           // same key but different element. treat as new element
-          // createElm(newStartVnode, insertedVnodeQueue, parentElm);
+          let newElm = createElement(newStartVnode);
+          parentElm.insertBefore(newElm, oldStartVnode.elm);
         }
       }
       newStartVnode = newCh[++newStartIdx];

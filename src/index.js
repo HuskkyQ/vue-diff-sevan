@@ -1,6 +1,5 @@
 import h from'./js/h'
 import patch from './js/patch'
-import renderDOM from './js/renderDOM'
 
 // let vDom = h('div', {}, '你好')
 // let vDom = h('div', {}, [
@@ -30,7 +29,8 @@ let vdom2 = h('div', {key: 'qw'}, [
 ])
 
 // renderDOM(vdom1, app)
-
+let btn = document.getElementById('btn')
+btn.onclick = function() {
+    patch(vdom1, vdom2)
+}
 patch(app, vdom1)
-
-patch(vdom1, vdom2)
