@@ -36,4 +36,29 @@ function patchVnode(oldVnode, newVnode) {
       }
     }
   }
+
+  patchProps(oldVnode, newVnode);
+}
+
+function patchProps(oldVnode, newVnode) {
+  var oldProps = oldVnode.data;
+  var newProps = newVnode.data;
+
+  for (var prop in oldProps) {
+    if (newProps[prop]) {
+      if (prop === 'value') {
+        if (oldVnode.tag === 'input' || oldVnode.tag === 'textarea') {
+          oldVnode.elm.value = newProps[prop];
+        } else {
+          oldVnode.elm.setAttribute(prop, newProps[prop]);
+        }
+      } else if (prop === 'style') {
+        oldVnode.elm.style.cssText = newProps[prop];
+      } else {
+        oldVnode.elm.setAttribute(prop, newProps[prop]);
+      }
+    } else {
+      oldVnode.elm.removeAttribute(prop);
+    }
+  }
 }

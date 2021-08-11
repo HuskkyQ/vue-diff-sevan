@@ -12,15 +12,15 @@ import patch from './js/patch'
 
 const app = document.getElementById('app')
 
-let vdom1 = h('div', {key: 'qw'}, [
-    h('p', {key:'A'}, '哈哈哈'),
-    h('p', {key:'B'}, '嘻嘻嘻'),
-    h('p', {key:'F'}, '嗯嗯嗯')
+let vdom1 = h('div', {key: 'qw', style: 'width: 300px; height: 400px; background: lightblue;'}, [
+    h('p', {key:'A', class: 'item'}, '哈哈哈'),
+    h('p', {key:'B', class: 'item'}, '嘻嘻嘻'),
+    h('p', {key:'F', class: 'item'}, '嗯嗯嗯')
 ])
 // let vdom1 = h('section', {}, '你好啊a')
-let vdom2 = h('div', {key: 'qw'}, [
-    h('p', {key:'A'}, '哈哈哈'),
-    h('p', {key:'B'}, '嘻嘻嘻'),
+let vdom2 = h('div', {key: 'qw', style: 'width: 400px; height: 300px; background: lightblue;'}, [
+    h('p', {key:'A', class: 'item-wrap'}, '哈哈哈'),
+    h('p', {key:'B', class: 'item' }, '嘻嘻嘻'),
     h('p', {key:'C'}, [
         h('span', {key: '1'}, '摩西摩西 '),
         h('span', {key: '2'}, '八嘎牙路')
